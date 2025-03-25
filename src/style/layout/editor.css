@@ -1,0 +1,83 @@
+@import '../globals.css';
+
+
+@layer components {
+  .editor-container {
+    @apply w-full flex flex-col gap-2;
+
+    .tools-container {
+      @apply w-full flex gap-2;
+
+      .tools-group {
+        @apply flex gap-2;
+        border-radius: 0px !important;
+
+        button {
+          @apply w-9 h-9;
+          padding: 0px !important;
+          border-radius: calc(var(--radius) - 4px) !important;
+        }
+      }
+    }
+
+    .editor {
+      @apply w-full min-h-[80lvh] bg-sidebar-accent text-sidebar-accent-foreground px-4 py-3 rounded-lg;
+
+      .tiptap {
+        @apply focus-visible:outline-none overflow-y-auto text-wrap;
+      }
+    }
+  }
+}
+
+
+@layer base {
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply block ms-0 me-0 font-bold;
+    line-height: 1.6;
+  }
+
+  h1 {
+    @apply text-[2.986rem] sm:text-[3.815rem];
+  }
+
+  h2 {
+    @apply text-[2.986rem] sm:text-[3.052rem];
+  }
+
+  h3 {
+    @apply text-[2.986rem] sm:text-[2.441rem];
+  }
+
+  h4 {
+    @apply text-[2.986rem] sm:text-[1.953rem];
+  }
+
+  h5 {
+    @apply text-[2.986rem] sm:text-[1.563rem];
+  }
+
+  h6 {
+    @apply text-[2.986rem] sm:text-[1.25rem];
+  }
+
+  p {
+    @apply text-base;
+    line-height: 1.6;
+  }
+
+  small {
+    @apply text-[0.833rem] sm:text-[0.8rem];
+    line-height: 1.6;
+  }
+
+  blockquote {
+    @apply border-l-4 border-border pl-4
+  }
+}

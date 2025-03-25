@@ -118,4 +118,8 @@
   body {
     @apply bg-background text-foreground w-full min-h-screen;
   }
+
+  .main {
+    @apply flex justify-center items-center px-8;
+  }
 }
