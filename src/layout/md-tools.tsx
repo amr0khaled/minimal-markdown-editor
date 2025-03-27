@@ -13,34 +13,42 @@ export default function MdTools() {
   }
   const disabledButton = editor.can().chain().focus()
   const buttonEditor = editor.chain().focus()
+  const {
+    toggleBold,
+    toggleItalic,
+    toggleUnderline,
+    toggleBlockquote,
+    toggleSubscript,
+    toggleSuperscript,
+    setParagraph,
+    setHeading,
+  } = buttonEditor
   return (
-    <section className="tools-container flex">
+    <section className="tools-container">
       <ToggleGroup className='tools-group' type='multiple' variant={'default'}>
         <ToggleGroupItem value='bold' size={'sm'}
-          onClick={() => buttonEditor.toggleBold().run()} disabled={!disabledButton.toggleBold().run()}>
+          onClick={() => toggleBold().run()} disabled={!disabledButton.toggleBold().run()}>
           <FaBold />
         </ToggleGroupItem>
         <ToggleGroupItem value='italic' size={'sm'}
-          onClick={() => buttonEditor.toggleItalic().run()} disabled={!disabledButton.toggleBold().run()}>
+          onClick={() => toggleItalic().run()} disabled={!disabledButton.toggleBold().run()}>
           <FaItalic />
         </ToggleGroupItem>
-        {/* TODO: Install Underline Extension*/}
         <ToggleGroupItem value='underline' size={'sm'}
-          onClick={() => buttonEditor.toggleBold().run()} disabled>
+          onClick={() => toggleUnderline().run()} disabled={!disabledButton.toggleUnderline().run()}>
           <FaUnderline />
         </ToggleGroupItem>
         <ToggleGroupItem value='quote' size={'sm'}
-          onClick={() => buttonEditor.toggleBlockquote().run()} disabled={!disabledButton.toggleBlockquote().run()}>
+          onClick={() => toggleBlockquote().run()} disabled={!disabledButton.toggleBlockquote().run()}>
           <FaQuoteRight />
         </ToggleGroupItem>
-        {/* TODO: Install Superscript & Subscript Extensions*/}
         <ToggleGroup className='tools-group' type='single' variant={'default'}>
           <ToggleGroupItem value='sub' size={'sm'}
-            onClick={() => buttonEditor.toggleBold().run()} disabled>
+            onClick={() => toggleSubscript().run()} disabled={!disabledButton.toggleSubscript().run()}>
             <FaSubscript />
           </ToggleGroupItem>
           <ToggleGroupItem value='sup' size={'sm'}
-            onClick={() => buttonEditor.toggleBold().run()} disabled>
+            onClick={() => toggleSuperscript().run()} disabled={!disabledButton.toggleSuperscript().run()}>
             <FaSuperscript />
           </ToggleGroupItem>
         </ToggleGroup>
@@ -48,31 +56,31 @@ export default function MdTools() {
       </ToggleGroup>
       <ToggleGroup className='tools-group' type='single' variant={'default'}>
         <ToggleGroupItem value='paragraph' size={'sm'}
-          onClick={() => buttonEditor.setParagraph().run()}>
+          onClick={() => setParagraph().run()}>
           <FaParagraph />
         </ToggleGroupItem>
         <ToggleGroupItem value='h1' size={'sm'}
-          onClick={() => buttonEditor.toggleHeading({ level: 1 }).run()}>
+          onClick={() => setHeading({ level: 1 }).run()}>
           <LucideHeading1 size={28} className='size-6' />
         </ToggleGroupItem>
         <ToggleGroupItem value='h2' size={'sm'}
-          onClick={() => buttonEditor.toggleHeading({ level: 2 }).run()}>
+          onClick={() => setHeading({ level: 2 }).run()}>
           <LucideHeading2 size={28} className='size-6' />
         </ToggleGroupItem>
         <ToggleGroupItem value='h3' size={'sm'}
-          onClick={() => buttonEditor.toggleHeading({ level: 3 }).run()}>
+          onClick={() => setHeading({ level: 3 }).run()}>
           <LucideHeading3 size={28} className='size-6' />
         </ToggleGroupItem>
         <ToggleGroupItem value='h4' size={'sm'}
-          onClick={() => buttonEditor.toggleHeading({ level: 4 }).run()}>
+          onClick={() => setHeading({ level: 4 }).run()}>
           <LucideHeading4 size={28} className='size-6' />
         </ToggleGroupItem>
         <ToggleGroupItem value='h5' size={'sm'}
-          onClick={() => buttonEditor.toggleHeading({ level: 5 }).run()}>
+          onClick={() => setHeading({ level: 5 }).run()}>
           <LucideHeading5 size={28} className='size-6' />
         </ToggleGroupItem>
         <ToggleGroupItem value='h6' size={'sm'}
-          onClick={() => buttonEditor.toggleHeading({ level: 6 }).run()}>
+          onClick={() => setHeading({ level: 6 }).run()}>
           <LucideHeading6 size={28} className='size-6' />
         </ToggleGroupItem>
       </ToggleGroup>

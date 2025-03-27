@@ -26,6 +26,10 @@
       .tiptap {
         @apply focus-visible:outline-none overflow-y-auto text-wrap;
       }
+
+      .floating-menu {
+        @apply flex gap-2;
+      }
     }
   }
 }
@@ -67,6 +71,10 @@
     @apply text-[2.986rem] sm:text-[1.25rem];
   }
 
+  hr {
+    @apply border-sidebar-ring
+  }
+
   p {
     @apply text-base;
     line-height: 1.6;
@@ -79,5 +87,14 @@
 
   blockquote {
     @apply border-l-4 border-border pl-4
+  }
+
+  pre {
+    @apply not-dark:bg-card-foreground not-dark:bg-card bg-card text-card-foreground p-4 rounded-xl overflow-x-auto text-sm font-medium;
+  }
+
+  code {
+    font-family: monospace;
+    color: #f8f8f2;
   }
 }
