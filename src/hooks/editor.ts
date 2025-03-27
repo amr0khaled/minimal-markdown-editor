@@ -3,6 +3,8 @@ import { Underline } from '@tiptap/extension-underline'
 import { Subscript } from '@tiptap/extension-subscript'
 import { Superscript } from '@tiptap/extension-superscript'
 import { CodeBlockLowlight } from '@tiptap/extension-code-block-lowlight'
+import { Image } from '@tiptap/extension-image'
+import { TitleBlock } from '@/lib/title-node'
 import { all, createLowlight } from 'lowlight'
 import js from 'highlight.js/lib/languages/javascript'
 import ts from 'highlight.js/lib/languages/typescript'
@@ -28,17 +30,25 @@ export const useMdEditorConf = () => {
   lowlight.register('scss', scss)
   return {
     content: `
-    <h3>Title!</h3>
+    <h2 data-undeletable="true" id='title-markdown'>Title!</h3>
     <p>Your Story.</p>
     `,
     extensions: [
+      TitleBlock,
       StarterKit.configure({
         codeBlock: false
       }),
       Underline,
       Subscript,
       Superscript,
-      CodeBlockLowlight.configure({ lowlight })
+      CodeBlockLowlight.configure({ lowlight }),
+      Image.configure({
+        inline: true,
+        allowBase64: true,
+        HTMLAttributes: {
+          'data-safe': 'true'
+        }
+      })
     ]
   }
 }
