@@ -1,7 +1,7 @@
 
 import { Button } from '@/components/ui/button'
 import { Spinner } from '@/components/ui/spinner'
-import { useExportDocx, useExportMd, useExportPdf } from '@/hooks/export'
+import { useExportDocx, useExportMd, useExportPdf } from '@/hooks/export.tsx'
 import '@/style/layout/editor.css'
 import { useCurrentEditor } from '@tiptap/react'
 

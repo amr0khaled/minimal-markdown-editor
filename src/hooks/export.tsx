@@ -1,8 +1,8 @@
 import { Packer, Paragraph, ImageRun, TextRun, HeadingLevel, IImageOptions, Document as Documentx } from 'docx'
-import { useSanitize } from './sanitize'
-import { useState } from 'react'
-import { PDFDocument, StandardFonts, rgb } from 'pdf-lib'
-import { PDFDownloadLink, Document as ReactDocument, Page, Image, Text, View, Link, StyleSheet, Font } from '@react-pdf/renderer'
+import { sanitize } from './sanitize'
+import { useEffect, useState } from 'react'
+// import { PDFDocument, PDFString, StandardFonts, rgb } from 'pdf-lib'
+import { PDFDownloadLink, Document as ReactDocument, Page, Image, Text, View, Link, StyleSheet, Font, pdf } from '@react-pdf/renderer'
 import TurndownService from 'turndown';
 
 const convertImageToUint8Array = async (src: string) => {
@@ -121,7 +121,7 @@ export const useExportDocx = (html: string) => {
         title = titleEl.textContent ?? ''
       }
       // Sanitize HTML
-      const cleanHtml = useSanitize(html)
+      const cleanHtml = sanitize(html)
       // Create DOCX document
       const doc = new Documentx({
         sections: [{
@@ -138,6 +138,7 @@ export const useExportDocx = (html: string) => {
       const link = document.createElement('a');
       link.href = url;
       link.download = `${title}.docx`;
+      link.target = "_blank"
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -247,109 +248,146 @@ export const useExportMd = (html: string) => {
 //   return { save, isExporting };
 // }
 
-/// WARNING: Loop on the element before turning them into React PDF Component
-/// Add 'data-pdfId' when looping first time
-type Block = {
-  id: string,
-  type: BlockType,
-  headingLevel?: number
-  content: string | Blob | Uint8Array | null,
-  src?: string,
-  children: Block[]
-}
-enum BlockType {
-  Document,
-  Container,
-  BlockText,
-  Text,
-  Image,
-  Link,
-  CodeBlock
-}
-const rootBlock: Block = {
-  type: BlockType.Document,
-  children: [],
-  content: null,
-  id: '0'
-}
-function treverse(node: Element, nodeBlock: Block, prefix = "") {
-  // Generate a unique ID based on hierarchy
-  if (node.children.length === 0) {
-    nodeBlock.children = []
-  }
-  Array.from(node.children).forEach((child, index) => {
-    const newId = prefix ? `${prefix}-${index + 1}` : `${index + 1}`;
-    child.setAttribute("data-pdf-id", newId);
-    let block: Block = {
-      type: BlockType.Container,
-      id: newId,
-      content: null,
-      children: []
-    }
-    switch (child.tagName) {
-      case 'p':
-        block.type = BlockType.BlockText
-        break
-      case 'a':
-        let value = child.getAttribute('href')
-        if (value) block.src = value
-        block.type = BlockType.Link
-        break
-      case 'img':
-        block.type = BlockType.Image
-        break
-      case 'pre':
-        block.type = BlockType.CodeBlock
-        break
-      default:
-        block.type = BlockType.Text
-    }
-    if (child.tagName.startsWith('h') && Number.isInteger(child.tagName[1])) {
-      const level = child.tagName[1]
-      block.type = BlockType.BlockText
-      block.headingLevel = parseInt(level)
-    }
-    block.content = child.textContent
-    block.id = newId
-
-    // Recursively process children
-    nodeBlock.children.push(block)
-    treverse(child, block, newId);
-  });
-}
-
-const processType = (dom: Document) => {
-  const root = dom.body.children[0]
-  const ids = ['0']
-  let level = 0
-  root.setAttribute('data-pdfid', ids[0])
-  let i = 0
-  let parent = root
-  let openedParent = false
-  let currentChild = 1
-  // looping children of the currentChild
-  for (const child of parent.children) {
-    i++
-    // checks if we finished looping inside this child
-    openedParent = !(i === parent.children.length)
-    if (!openedParent) {
-      // if we finished this level children
-      if (currentChild === parent.children.length) { }
-      // if we finished this level children
-      else {
-
+const processNodes = (html: string) => {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, 'text/html');
+  const nodes = doc.body.children;
+  const docxElements = [];
+  for (const node of nodes) {
+    let tag = node.tagName.toLowerCase()
+    if (tag !== 'img') {
+      if (tag === 'p' && node.children.length !== 0) {
+        tag = node.children.item(0)?.tagName.toLowerCase() ?? 'p'
       }
-    }
-    child.setAttribute('data-pdfparent', ids.join('-'))
-    child.setAttribute('data-pdfid', i.toString())
-    // checks if have children
-    if (child.children.length > 0) {
+      console.log(tag)
+      if (tag === 'em') {
+        docxElements.push(<Text style={{ fontSize: 12, fontStyle: 'italic' }}>{node.textContent}</Text>)
+        continue
+      }
+      if (tag === 'strong') {
+        docxElements.push(<Text style={{ fontWeight: 'semibold' }}>{node.textContent}</Text>)
+        continue
+      }
+      if (tag === 'a') {
+        docxElements.push(
+          <Link href={(node as HTMLAnchorElement).href}>
+            {node.textContent}
+          </Link>
+        )
+        continue
+      }
+      if (tag === 'p') {
+        docxElements.push(
+          <Text style={{ fontSize: 12, paddingVertical: 1 * 4 }}>
+            {node.textContent}
+          </Text>
+        )
+        continue
+      }
+      if (tag === 'pre') {
+        docxElements.push(
+          <View
+            style={{
+              backgroundColor: '#101010',
+              color: '#fefefe',
+              borderRadius: 1.5 * 4,
+              paddingVertical: 0.75 * 4,
+              paddingHorizontal: 1 * 4
+            }}
+          >
+            <Text>{node.children.item(0)?.textContent ?? ''}</Text>
+          </View>
+        )
+        continue
+      }
+      if (tag.startsWith('h') && !tag.endsWith('r') && tag.length === 2) {
+        const size = () => {
+          switch (tag) {
+            case 'h1':
+              return 56
+            case 'h2':
+              return 48
+            case 'h3':
+              return 40
+            case 'h4':
+              return 32
+            case 'h5':
+              return 24
+            default:
+              return 16
+          }
+        }
+        const margin = () => {
+          switch (tag) {
+            case 'h1':
+              return 10
+            case 'h2':
+              return 8
+            case 'h3':
+              return 6
+            case 'h4':
+              return 4
+            case 'h5':
+              return 3
+            default:
+              return 2
+          }
+        }
+        docxElements.push(
+          <Text
+            style={{
+              fontSize: size(),
+              marginBottom: margin(),
+              fontWeight: 'bold'
+            }}
+          >
+            {node.textContent ?? ''}
+          </Text>
+        )
+        continue
+      }
+      docxElements.push(<Text>{node.textContent}</Text>)
+    } else if (tag === 'img') {
+      docxElements.push(
+        <Image src={(node as HTMLImageElement).src} cache={true} />
+      )
+      continue
     }
   }
+  return docxElements
 }
 
-export const useExportPdf = () => {
+export const useExportPdf = (html: string) => {
+  const [isExporting, setIsExporting] = useState(false)
+  const save = async () => {
+    setIsExporting(true)
+    console.log(html)
+    const cleanHtml = sanitize(html)
+    const content = processNodes(cleanHtml)
+    const RootPDF =
+      <ReactDocument title={getTitle(html)?.textContent ?? `${Date.now()}`}>
+        <Page size='A4' style={{
+          paddingVertical: 5 * 4,
+          paddingHorizontal: 3 * 4
+        }}>
+          {...content}
+        </Page>
+      </ReactDocument>
+    const blob = await pdf(RootPDF).toBlob()
+    const _url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    const title = getTitle(html)?.textContent
+    link.href = _url
+    link.download = `${title}.docx`;
+    link.target = "_blank"
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(_url)
 
+    setIsExporting(false)
+  }
+  return { save, isExporting }
 }
 
 // const LIGHT_MODE_STYLES = {

@@ -35,7 +35,7 @@ const sanitizeConfig = {
 };
 
 
-export const useSanitize = (dirtyHtml: string) => {
+export const sanitize = (dirtyHtml: string) => {
   try {
     return DOMPurify.sanitize(dirtyHtml, sanitizeConfig)
       .replace(/javascript:/gi, '')

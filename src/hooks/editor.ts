@@ -30,7 +30,7 @@ export const useMdEditorConf = () => {
   lowlight.register('scss', scss)
   return {
     content: `
-    <h2 data-undeletable="true" id='title-markdown'>Title!</h3>
+    <h2 data-undeletable="true" id='title-markdown'>Title!</h2>
     <p>Your Story.</p>
     `,
     extensions: [
