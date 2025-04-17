@@ -40,7 +40,11 @@ export const useMdEditorConf = () => {
       }),
       Underline,
       Subscript,
-      Superscript,
+      Superscript.configure({
+        HTMLAttributes: {
+          class: ''
+        }
+      }),
       CodeBlockLowlight.configure({ lowlight }),
       Image.configure({
         inline: true,

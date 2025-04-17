@@ -3,7 +3,8 @@ const ALLOWED_TAGS = [
   'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
   'p', 'strong', 'em', 'ul', 'ol', 'li',
   'img', 'span', 'div', 'br', 'hr',
-  'table', 'thead', 'tbody', 'tr', 'th', 'td'
+  'table', 'thead', 'tbody', 'tr', 'th', 'td', 'sub', 'sup',
+  'pre', 'code'
 ];
 
 const ALLOWED_ATTRS = {

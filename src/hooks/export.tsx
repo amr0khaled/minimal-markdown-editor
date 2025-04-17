@@ -1,6 +1,6 @@
 import { Packer, Paragraph, ImageRun, TextRun, HeadingLevel, IImageOptions, Document as Documentx } from 'docx'
 import { sanitize } from './sanitize'
-import { useEffect, useState } from 'react'
+import { Dispatch, DispatchWithoutAction, useEffect, useState } from 'react'
 // import { PDFDocument, PDFString, StandardFonts, rgb } from 'pdf-lib'
 import { PDFDownloadLink, Document as ReactDocument, Page, Image, Text, View, Link, StyleSheet, Font, pdf } from '@react-pdf/renderer'
 import TurndownService from 'turndown';
@@ -357,38 +357,74 @@ const processNodes = (html: string) => {
   return docxElements
 }
 
-export const useExportPdf = (html: string) => {
+export const useExportPdf = (html: string, setShow: Dispatch<boolean>, show: boolean) => {
   const [isExporting, setIsExporting] = useState(false)
-  const save = async () => {
+
+  const save = () => {
     setIsExporting(true)
     console.log(html)
-    const cleanHtml = sanitize(html)
-    const content = processNodes(cleanHtml)
-    const RootPDF =
-      <ReactDocument title={getTitle(html)?.textContent ?? `${Date.now()}`}>
-        <Page size='A4' style={{
-          paddingVertical: 5 * 4,
-          paddingHorizontal: 3 * 4
-        }}>
-          {...content}
-        </Page>
-      </ReactDocument>
-    const blob = await pdf(RootPDF).toBlob()
-    const _url = URL.createObjectURL(blob)
-    const link = document.createElement('a')
-    const title = getTitle(html)?.textContent
-    link.href = _url
-    link.download = `${title}.docx`;
-    link.target = "_blank"
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-    URL.revokeObjectURL(_url)
+    const content = sanitize(html)
+    const title = getTitle(content)?.textContent
+
+    const win = window.open('/download', '_blank', 'width=800, height=600')
+    if (win) {
+      const styles = [...document.head.children].filter(e => e.tagName === 'STYLE')
+      const _content = `
+      <html>
+        <head>
+          <title>${title}</title>
+          ${styles.map(e => e.outerHTML).join('\n')}
+        </head>
+        <body>
+          ${content}
+        </body>
+      </html>
+    `
+      win.document.write(_content)
+      win.document.close()
+      win.print()
+    } else {
+      console.log('win is null')
+    }
+
 
     setIsExporting(false)
   }
   return { save, isExporting }
 }
+
+// export const useExportPdf = (html: string) => {
+//   const [isExporting, setIsExporting] = useState(false)
+//   const save = async () => {
+//     setIsExporting(true)
+//     console.log(html)
+//     const cleanHtml = sanitize(html)
+//     const content = processNodes(cleanHtml)
+//     const RootPDF =
+//       <ReactDocument title={getTitle(html)?.textContent ?? `${Date.now()}`}>
+//         <Page size='A4' style={{
+//           paddingVertical: 5 * 4,
+//           paddingHorizontal: 3 * 4
+//         }}>
+//           {...content}
+//         </Page>
+//       </ReactDocument>
+//     const blob = await pdf(RootPDF).toBlob()
+//     const _url = URL.createObjectURL(blob)
+//     const link = document.createElement('a')
+//     const title = getTitle(html)?.textContent
+//     link.href = _url
+//     link.download = `${title}.docx`;
+//     link.target = "_blank"
+//     document.body.appendChild(link)
+//     link.click()
+//     document.body.removeChild(link)
+//     URL.revokeObjectURL(_url)
+// 
+//     setIsExporting(false)
+//   }
+//   return { save, isExporting }
+// }
 
 // const LIGHT_MODE_STYLES = {
 //   background: rgb(1, 1, 1),

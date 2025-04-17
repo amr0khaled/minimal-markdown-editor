@@ -123,3 +123,9 @@
     @apply flex justify-center items-center px-8;
   }
 }
+
+
+@page {
+  size: A4 portrait;
+  margin: 8mm 4mm;
+}
