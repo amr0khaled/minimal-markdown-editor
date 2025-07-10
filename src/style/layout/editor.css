@@ -1,0 +1,108 @@
+@import '../globals.css';
+
+
+@layer components {
+  .editor-container {
+    @apply w-full flex flex-col gap-2;
+
+    .tools-container {
+      @apply w-full flex gap-2;
+
+      .tools-group {
+        @apply flex gap-2;
+        border-radius: 0px !important;
+
+        button {
+          @apply w-9 h-9;
+          padding: 0px !important;
+          border-radius: calc(var(--radius) - 4px) !important;
+        }
+      }
+    }
+
+    .editor {
+      @apply w-full min-h-[80lvh] bg-sidebar-accent text-sidebar-accent-foreground px-4 py-3 rounded-lg;
+
+      .tiptap {
+        @apply focus-visible:outline-none overflow-y-auto text-wrap;
+      }
+
+      .floating-menu {
+        @apply flex gap-2;
+      }
+    }
+
+    .editor-footer {
+      @apply flex gap-4
+    }
+  }
+}
+
+
+@layer base {
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply block ms-0 me-0 font-bold;
+    line-height: 1.6;
+  }
+
+  h1 {
+    @apply text-[2.027rem] sm:text-[2.986rem];
+  }
+
+  h2 {
+    @apply text-[1.802rem] sm:text-[2.488rem];
+  }
+
+  h3 {
+    @apply text-[1.602rem] sm:text-[2.074rem];
+  }
+
+  h4 {
+    @apply text-[1.424rem] sm:text-[1.728rem];
+  }
+
+  h5 {
+    @apply text-[1.266rem] sm:text-[1.440rem];
+  }
+
+  h6 {
+    @apply text-[1.125rem] sm:text-[1.20rem];
+  }
+
+  hr {
+    @apply border-sidebar-ring
+  }
+
+  p {
+    @apply text-base;
+    line-height: 1.6;
+  }
+
+  small {
+    @apply text-[0.889rem] sm:text-[0.833rem];
+    line-height: 1.6;
+  }
+
+  blockquote {
+    @apply border-l-4 border-border pl-4
+  }
+
+  code {
+    font-family: monospace;
+    @apply dark:text-[#f8f8f2] text-gray-800;
+  }
+
+  pre {
+    @apply not-dark:bg-card-foreground not-dark:bg-card bg-card text-card-foreground p-4 rounded-xl overflow-x-auto text-sm font-medium;
+
+    code {
+      @apply text-[#f8f8f2];
+    }
+  }
+}

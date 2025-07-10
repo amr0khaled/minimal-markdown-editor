@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import 'highlight.js/styles/tokyo-night-dark.min.css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -118,4 +119,14 @@
   body {
     @apply bg-background text-foreground w-full min-h-screen;
   }
+
+  .main {
+    @apply flex justify-center items-center px-8;
+  }
+}
+
+
+@page {
+  size: A4 portrait;
+  margin: 8mm 4mm;
 }
