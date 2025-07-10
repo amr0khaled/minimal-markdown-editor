@@ -10,7 +10,7 @@ export const TitleBlock = Node.create({
   addAttributes() {
     return {
       level: {
-        default: 2,
+        default: 1,
         parseHTML: element => element.tagName.slice(1),
         renderHTML: attributes => {
           return { level: attributes.level }
@@ -20,11 +20,11 @@ export const TitleBlock = Node.create({
   },
 
   parseHTML() {
-    return [{ tag: "h2[data-undeletable]#title-markdown" }]
+    return [{ tag: "h1[data-undeletable]#title-markdown" }]
   },
 
   renderHTML() {
-    return ["h2", { "data-undeletable": "true", id: 'title-markdown' }, 0]
+    return ["h1", { "data-undeletable": "true", id: 'title-markdown' }, 0]
   },
 
   addKeyboardShortcuts() {

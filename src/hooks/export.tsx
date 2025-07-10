@@ -4,6 +4,7 @@ import { Dispatch, DispatchWithoutAction, useEffect, useState } from 'react'
 // import { PDFDocument, PDFString, StandardFonts, rgb } from 'pdf-lib'
 import { PDFDownloadLink, Document as ReactDocument, Page, Image, Text, View, Link, StyleSheet, Font, pdf } from '@react-pdf/renderer'
 import TurndownService from 'turndown';
+import * as hl from 'highlight.js/styles/tokyo-night-dark.min.css'
 
 const convertImageToUint8Array = async (src: string) => {
   if (src.startsWith('data:')) {
@@ -259,7 +260,6 @@ const processNodes = (html: string) => {
       if (tag === 'p' && node.children.length !== 0) {
         tag = node.children.item(0)?.tagName.toLowerCase() ?? 'p'
       }
-      console.log(tag)
       if (tag === 'em') {
         docxElements.push(<Text style={{ fontSize: 12, fontStyle: 'italic' }}>{node.textContent}</Text>)
         continue

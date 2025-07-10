@@ -15,6 +15,8 @@ import java from 'highlight.js/lib/languages/java'
 import rust from 'highlight.js/lib/languages/rust'
 import go from 'highlight.js/lib/languages/go'
 import scss from 'highlight.js/lib/languages/scss'
+import php from 'highlight.js/lib/languages/php'
+import sql from 'highlight.js/lib/languages/sql'
 
 const lowlight = createLowlight(all)
 
@@ -28,23 +30,21 @@ export const useMdEditorConf = () => {
   lowlight.register('rust', rust)
   lowlight.register('go', go)
   lowlight.register('scss', scss)
+  lowlight.register('php', php)
+  lowlight.register('sql', sql)
   return {
     content: `
-    <h2 data-undeletable="true" id='title-markdown'>Title!</h2>
+    <h1 data-undeletable="true" id='title-markdown'>Title!</h1>
     <p>Your Story.</p>
     `,
     extensions: [
       TitleBlock,
       StarterKit.configure({
-        codeBlock: false
+        codeBlock: false,
       }),
       Underline,
       Subscript,
-      Superscript.configure({
-        HTMLAttributes: {
-          class: ''
-        }
-      }),
+      Superscript,
       CodeBlockLowlight.configure({ lowlight }),
       Image.configure({
         inline: true,

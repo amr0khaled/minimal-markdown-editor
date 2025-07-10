@@ -52,27 +52,27 @@
   }
 
   h1 {
-    @apply text-[2.986rem] sm:text-[3.815rem];
+    @apply text-[2.027rem] sm:text-[2.986rem];
   }
 
   h2 {
-    @apply text-[2.986rem] sm:text-[3.052rem];
+    @apply text-[1.802rem] sm:text-[2.488rem];
   }
 
   h3 {
-    @apply text-[2.986rem] sm:text-[2.441rem];
+    @apply text-[1.602rem] sm:text-[2.074rem];
   }
 
   h4 {
-    @apply text-[2.986rem] sm:text-[1.953rem];
+    @apply text-[1.424rem] sm:text-[1.728rem];
   }
 
   h5 {
-    @apply text-[2.986rem] sm:text-[1.563rem];
+    @apply text-[1.266rem] sm:text-[1.440rem];
   }
 
   h6 {
-    @apply text-[2.986rem] sm:text-[1.25rem];
+    @apply text-[1.125rem] sm:text-[1.20rem];
   }
 
   hr {
@@ -85,7 +85,7 @@
   }
 
   small {
-    @apply text-[0.833rem] sm:text-[0.8rem];
+    @apply text-[0.889rem] sm:text-[0.833rem];
     line-height: 1.6;
   }
 
@@ -93,12 +93,16 @@
     @apply border-l-4 border-border pl-4
   }
 
-  pre {
-    @apply not-dark:bg-card-foreground not-dark:bg-card bg-card text-card-foreground p-4 rounded-xl overflow-x-auto text-sm font-medium;
-  }
-
   code {
     font-family: monospace;
-    color: #f8f8f2;
+    @apply dark:text-[#f8f8f2] text-gray-800;
+  }
+
+  pre {
+    @apply not-dark:bg-card-foreground not-dark:bg-card bg-card text-card-foreground p-4 rounded-xl overflow-x-auto text-sm font-medium;
+
+    code {
+      @apply text-[#f8f8f2];
+    }
   }
 }

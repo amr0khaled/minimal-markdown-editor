@@ -31,7 +31,7 @@ export default function MdFooter() {
     <section className='editor-footer'>
       <Alert setShow={setFirst} show={first} />
       <Button disabled={docxIsExporting} onClick={saveToDocx}>{docxIsExporting ? <Spinner /> : 'Export To Docx'}</Button>
-      <Button disabled={pdfIsExporting} onClick={showAlert}>{pdfIsExporting ? <Spinner /> : 'Export To Pdf'}</Button>
+      <Button disabled={pdfIsExporting} onClick={saveToPdf}>{pdfIsExporting ? <Spinner /> : 'Export To Pdf'}</Button>
       <Button disabled={mdIsExporting} onClick={saveToMd}>{mdIsExporting ? <Spinner /> : 'Export To MarkDown'}</Button>
     </section>
   )
